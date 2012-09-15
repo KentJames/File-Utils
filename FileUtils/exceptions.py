@@ -1,0 +1,2 @@
+class FileUtilsException(Exception):
+    pass
