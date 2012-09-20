@@ -5,18 +5,23 @@
 ## James Kent 2012
 ##
 
+
+from .. import exceptions
 import hashlib
 import argparse
 import sys
 
 
-class hashexception(Exception):
+class hashexception(exceptions.FileUtilsException):
     pass
 
 class FilePathException(hashexception):
     pass
 
-class HashtypeException(hashexception):
+class HashTypeException(hashexception):
+    pass
+
+class HashDataException(hashexception):
     pass
         
 
@@ -50,22 +55,27 @@ class hasher():
         
     def hashfile(self):
 
+
+        self.readfile()
+
+
+        
+        
+
+
+        self.digestfiles()
+
+    def readfile(self):
+
         for self.block in iter(lambda: self.file.read(32768),b""):
 
             self.check.update(self.block)
+        
 
-
-        self.asciihash()
-        self.hexhash()
-
-    def asciihash(self):
+    def digestfiles(self):
 
         self.hashsums.update({'asciikey':self.check.digest()})
-    
-
-    def hexhash(self):
-
-        self.hashsums.update({'hexkey':self.check.hexdigest()})
+        self.hashsums.update({'hexkey':self.check.hexdigest()})        
 
     def returnhexhash(self):
 
@@ -115,9 +125,6 @@ class hasher_cli(hasher):
 Use -h or --help to identify correct hash types.""")
             
 
-        
-
-
     def fileaccess(self):
 
         self.filename = self.args.file
@@ -130,10 +137,10 @@ class hasher_if(hasher):
         hasher.__init__(self)
         self.filepath = filepath
         if self.filepath is None:
-            raise FilePathException("hasher.filepath")
+            raise FilePathException("hasher_if.filepath")
         self.checksumtype = checksumtype
         if self.checksumtype is None:
-            raise HashTypeException("hasher.hashtype")
+            raise HashTypeException("hasher_if.hashtype")
 
     def fileaccess(self):
         self.filename = self.filepath
@@ -143,8 +150,12 @@ class hasher_if(hasher):
 
         try:
             self.check = getattr(hashlib,self.checksumtype)()
+
         except AttributeError as msg:
+            raise HashTypeException("hashif.hashtype")
             return(msg)
+        
+    
             
         
 
