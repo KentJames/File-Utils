@@ -1,9 +1,8 @@
-##!/usr/bin/python
-## Simple file hashing. Can be used as imported objects or standalone
-## terminal hash.
-##
-## James Kent 2012
-##
+##!/usr/bin/python3
+
+
+# Used as an interface for python crytographic hash functions.
+#
 
 
 from .. import exceptions
