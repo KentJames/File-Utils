@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+#Run this as main from command line to spawn the main HashUtils application.
+#NOTE: You MUST have the pyqt framework installed or this will not work.
+
 import sys
 from FileUtils.hashob import hashob
 from FileUtils.fileutilsqt import iface
