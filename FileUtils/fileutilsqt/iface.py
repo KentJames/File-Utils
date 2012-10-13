@@ -1,12 +1,41 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
+#  Spawns main form for HashUtils, and manages events and child forms.
+#  To do: 
+#  Cleanup module package dependencies
+#  Formatting of ascii/utf output
+#  Finish Dialog Connections
+#  Implement saveas feature for specific hash types.
+#
+#
+#
+#
+#  Made by: James Kent (jameschristopherkent@gmail.com)
+#  Source is hosted here: https://github.com/KentJames/File-Utils
+#
+#  Copyright (C) 2013  James Kent (jameschristopherkent@gmail.com)
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#
+#
 
 
 
 import sys
 import os
 from PyQt4 import QtCore,QtGui
-from . import qtiface
+from ..os import platformdetect
 from ..hashob import hashob
+from .Forms import aboutdialog,qtiface
 
 class StartQT4(QtGui.QMainWindow):
 
@@ -14,20 +43,38 @@ class StartQT4(QtGui.QMainWindow):
 
 
         QtGui.QWidget.__init__(self, parent)
+
+        #Setup Variables
+
+        self.systeminfo = platformdetect.detectos()
         self.filename = None
         self.checksum = None
         self.hashtypeqt = None
         self.string = None
+
+        
+        #Setup Main UI form
+
         self.ui = qtiface.Ui_QTIface()
         self.ui.setupUi(self)
+     
+
+
+        ##Connect all buttons to event functions.
+
+        #Pushbuttons
         QtCore.QObject.connect(self.ui.FileSearch,QtCore.SIGNAL("clicked()"), self.file_browser)
         QtCore.QObject.connect(self.ui.checksumactivate,QtCore.SIGNAL("clicked()"), self.checksum_activate)
         QtCore.QObject.connect(self.ui.cleartextboxbutton,QtCore.SIGNAL("clicked()"),self.clearall)
         QtCore.QObject.connect(self.ui.checksumtypeselection,QtCore.SIGNAL("activated(QString)"),self.sethashtype)
+
+        #Menus
         QtCore.QObject.connect(self.ui.actionQuit_3,QtCore.SIGNAL("triggered()"),self.exitqt)
         QtCore.QObject.connect(self.ui.actionSave_hash_as,QtCore.SIGNAL("triggered()"),self.saveas)
         QtCore.QObject.connect(self.ui.actionHelp,QtCore.SIGNAL("triggered()"),self.showhelp)
         QtCore.QObject.connect(self.ui.actionAbout,QtCore.SIGNAL("triggered()"),self.showabout)
+
+        #Establish default hash
         self.sethashtype()
 
     def file_browser(self):
@@ -112,8 +159,28 @@ class StartQT4(QtGui.QMainWindow):
         pass
     
     def showabout(self):
-        pass
 
+        
+        
+        Dialog = QtGui.QDialog()
+
+        self.aboutdialog = aboutdialog.Ui_Dialog()
+        self.aboutdialog.setupUi(Dialog)
+        self.aboutdialog.label.setText(QtGui.QApplication.translate("Dialog", """HashUtil v0.8.0
+
+Created by James Kent
+
+Source: https://github.com/KentJames/File-Utils""", None, QtGui.QApplication.UnicodeUTF8))
+        self.aboutdialog.label_2.setText(QtGui.QApplication.translate("Dialog", """System Info: 
+
+Platform: {} 
+
+Release: {} 
+
+Version: {}""".format(self.systeminfo['OS'],self.systeminfo['Release'],self.systeminfo['Version'])))
+        Dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)
+        Dialog.exec_()
+        
 
     def exitqt(self):
 
