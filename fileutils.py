@@ -4,7 +4,6 @@
 #NOTE: You MUST have the pyqt framework installed or this will not work.
 
 import sys
-from FileUtils.hashob import hashob
 from FileUtils.fileutilsqt import iface
 
 
