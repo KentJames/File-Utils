@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+############################################################################################
 
 The original purpose of this utility was to provide a small and lightweight frontend
 to the crytographic services of the python library. This purpose has since been expanded
@@ -35,10 +36,11 @@ I welcome comments and critiques on my code and what I can improve so please tak
 
 ###KNOWN ISSUES###:
 
-There is a known issue involving the PyQt4 framework and specifying filepaths on unmounted
-filesystems. This causes python to crash out. For now, if you want to hash a file located
-on an unmounted filesystem, you must mount the filesystem BEFORE starting HashUtility.
-I hope to fix this problem in a later update. 
+#  There is a known issue involving the PyQt4 framework and specifying filepaths on unmounted
+   filesystems. This causes python to crash out. For now, if you want to hash a file located
+   on an unmounted filesystem, you must mount the filesystem BEFORE starting HashUtility.
+   I hope to fix this problem in a later update. 
+#  Certain buttons on the UI aren't connected yet, I should connect the signals and slots for these in the next update.
 
 
 ###TO DO###:
@@ -49,4 +51,9 @@ I hope to fix this problem in a later update.
 #  Formatting of ascii/utf output
 #  Finish Dialog Connections
 #  Implement saveas feature for specific hash types
-#  
+#  Add verify feature for hash files.
+
+##Backend:
+
+#  Add logic for opening .md5 and other crytographic file extensions for verifying.
+#  Fix crash bug associated with unmounted filesystems on unix derived systems(OSX/Linux)
