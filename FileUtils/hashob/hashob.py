@@ -12,14 +12,23 @@ import sys
 import os
 
 
+##Define Exceptions:
+
 class hashexception(exceptions.FileUtilsException):
     pass
+
+#Exception if File patch is not valid.
 
 class FilePathException(hashexception):
     pass
 
+#Exception if Hash type specified is invalid
+
 class HashTypeException(hashexception):
     pass
+
+#Exception if data passed to hash functin is invalid.
+
 
 class HashDataException(hashexception):
     pass
@@ -115,46 +124,47 @@ class hasher(object):
 
 ##Class used for acting as a standalone command line hashing file.
 
-class hasher_cli(hasher):
-
-    def __init__(self):
-        
-        hasher.__init__(self)
-        self.args = None
-        self.command = None
-        
-    def parse_commandline(self):
-
-        self.command = argparse.ArgumentParser(description=
-                                               'Checksum Tool v1.1.1')
-        self.command.add_argument('type',metavar = 'C', default = 'md5',
-                             help = ('Specifies type of checksum. md5,'
-                                     ' sha1, sha224, sha256, sha384'
-                                     ' and sha512 supported.'))
-        self.command.add_argument('file',metavar = 'F',
-                             help = 'File to Checksum')
-        self.args = self.command.parse_args()
-        self.hashtype()
-        self.fileaccess()
-
-    def hashtype(self):
-
-        try:
-            
-            self.check = getattr(hashlib, self.args.type)()
-
-        except AttributeError as msg:
-
-            print(msg)
-            print(
-"""Incorrect hash type used.
-Use -h or --help to identify correct hash types.""")
-            
-
-    def fileaccess(self):
-
-        self.filename = self.args.file
-        self.openfile()
+##class hasher_cli(hasher):
+##
+##    def __init__(self):
+##        
+##        hasher.__init__(self)
+##        self.args = None
+##        self.command = None
+##        
+##    def parse_commandline(self):
+##
+##        self.command = argparse.ArgumentParser(description=
+##                                               'Checksum Tool v1.1.1')
+##        self.command.add_argument('type',metavar = 'C', default = 'md5',
+##                             help = ('Specifies type of checksum. md5,'
+##                                     ' sha1, sha224, sha256, sha384'
+##                                     ' and sha512 supported.'))
+##        self.command.add_argument('file',metavar = 'F',
+##                             help = 'File to Checksum')
+##        self.args = self.command.parse_args()
+##        self.hashtype()
+##        self.fileaccess()
+##
+##    def hashtype(self):
+##
+##        try:
+##            
+##            self.check = getattr(hashlib, self.args.type)()
+##
+##        except AttributeError as msg:
+##
+##            print(msg)
+##            print(
+##"""Incorrect hash type used.
+##Use -h or --help to identify correct hash types.""")
+##            
+## Why is this here? \/
+##
+##   def fileaccess(self):
+##
+##        self.filename = self.args.file
+##        self.openfile()
         
 
 class hasher_if(hasher):
@@ -184,6 +194,9 @@ class hasher_if(hasher):
             raise HashTypeException("hashif.hashtype")
             
         
-    
-            
+class hash_directory(hasher):
 
+    def __init__(self):
+        hasher.__init__(self)
+        self.directoryfiles = None
+        pass

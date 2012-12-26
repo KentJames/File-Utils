@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'qtiface.ui'
 #
-# Created: Sun Sep 23 16:11:18 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Sun Nov 11 16:10:10 2012
+#      by: PyQt4 UI code generator 4.9.5
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,25 +17,26 @@ except AttributeError:
 class Ui_QTIface(object):
     def setupUi(self, QTIface):
         QTIface.setObjectName(_fromUtf8("QTIface"))
-        QTIface.resize(631, 273)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        QTIface.resize(629, 313)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(QTIface.sizePolicy().hasHeightForWidth())
         QTIface.setSizePolicy(sizePolicy)
-        QTIface.setMinimumSize(QtCore.QSize(631, 273))
-        QTIface.setMaximumSize(QtCore.QSize(631, 273))
+        QTIface.setMinimumSize(QtCore.QSize(629, 313))
+        QTIface.setMaximumSize(QtCore.QSize(629, 313))
         QTIface.setMouseTracking(False)
         self.centralWidget = QtGui.QWidget(QTIface)
         self.centralWidget.setObjectName(_fromUtf8("centralWidget"))
         self.FileSearch = QtGui.QPushButton(self.centralWidget)
-        self.FileSearch.setGeometry(QtCore.QRect(10, 10, 141, 51))
+        self.FileSearch.setGeometry(QtCore.QRect(10, 10, 141, 41))
         self.FileSearch.setObjectName(_fromUtf8("FileSearch"))
         self.checksumactivate = QtGui.QPushButton(self.centralWidget)
         self.checksumactivate.setGeometry(QtCore.QRect(440, 210, 181, 31))
         self.checksumactivate.setObjectName(_fromUtf8("checksumactivate"))
         self.textEdit = QtGui.QTextEdit(self.centralWidget)
         self.textEdit.setGeometry(QtCore.QRect(160, 10, 461, 191))
+        self.textEdit.setFrameShape(QtGui.QFrame.Panel)
         self.textEdit.setReadOnly(True)
         self.textEdit.setObjectName(_fromUtf8("textEdit"))
         self.checksumtypeselection = QtGui.QComboBox(self.centralWidget)
@@ -47,20 +48,26 @@ class Ui_QTIface(object):
         self.checksumtypeselection.addItem(_fromUtf8(""))
         self.checksumtypeselection.addItem(_fromUtf8(""))
         self.checksumtypeselection.addItem(_fromUtf8(""))
+        self.checksumtypeselection.addItem(_fromUtf8(""))
         self.label = QtGui.QLabel(self.centralWidget)
         self.label.setGeometry(QtCore.QRect(170, 210, 91, 31))
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName(_fromUtf8("label"))
         self.cleartextboxbutton = QtGui.QPushButton(self.centralWidget)
-        self.cleartextboxbutton.setGeometry(QtCore.QRect(10, 70, 141, 51))
+        self.cleartextboxbutton.setGeometry(QtCore.QRect(10, 60, 141, 41))
         self.cleartextboxbutton.setObjectName(_fromUtf8("cleartextboxbutton"))
-        self.label_2 = QtGui.QLabel(self.centralWidget)
-        self.label_2.setGeometry(QtCore.QRect(10, 130, 131, 121))
-        self.label_2.setWordWrap(True)
-        self.label_2.setObjectName(_fromUtf8("label_2"))
+        self.Verifybutton = QtGui.QPushButton(self.centralWidget)
+        self.Verifybutton.setGeometry(QtCore.QRect(440, 250, 181, 31))
+        self.Verifybutton.setObjectName(_fromUtf8("Verifybutton"))
+        self.verifylineedit = QtGui.QLineEdit(self.centralWidget)
+        self.verifylineedit.setGeometry(QtCore.QRect(10, 250, 391, 31))
+        self.verifylineedit.setObjectName(_fromUtf8("verifylineedit"))
+        self.verifyfilebrowserbutton = QtGui.QToolButton(self.centralWidget)
+        self.verifyfilebrowserbutton.setGeometry(QtCore.QRect(400, 250, 31, 31))
+        self.verifyfilebrowserbutton.setObjectName(_fromUtf8("verifyfilebrowserbutton"))
         QTIface.setCentralWidget(self.centralWidget)
         self.menuBar = QtGui.QMenuBar(QTIface)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 631, 25))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 629, 21))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuFile = QtGui.QMenu(self.menuBar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
@@ -89,7 +96,7 @@ class Ui_QTIface(object):
 
     def retranslateUi(self, QTIface):
         QTIface.setWindowTitle(QtGui.QApplication.translate("QTIface", "QTIface", None, QtGui.QApplication.UnicodeUTF8))
-        self.FileSearch.setText(QtGui.QApplication.translate("QTIface", "Browse", None, QtGui.QApplication.UnicodeUTF8))
+        self.FileSearch.setText(QtGui.QApplication.translate("QTIface", " Browse ", None, QtGui.QApplication.UnicodeUTF8))
         self.checksumactivate.setText(QtGui.QApplication.translate("QTIface", "Generate Hash", None, QtGui.QApplication.UnicodeUTF8))
         self.checksumtypeselection.setItemText(0, QtGui.QApplication.translate("QTIface", "md5", None, QtGui.QApplication.UnicodeUTF8))
         self.checksumtypeselection.setItemText(1, QtGui.QApplication.translate("QTIface", "sha1", None, QtGui.QApplication.UnicodeUTF8))
@@ -97,13 +104,11 @@ class Ui_QTIface(object):
         self.checksumtypeselection.setItemText(3, QtGui.QApplication.translate("QTIface", "sha256", None, QtGui.QApplication.UnicodeUTF8))
         self.checksumtypeselection.setItemText(4, QtGui.QApplication.translate("QTIface", "sha384", None, QtGui.QApplication.UnicodeUTF8))
         self.checksumtypeselection.setItemText(5, QtGui.QApplication.translate("QTIface", "sha512", None, QtGui.QApplication.UnicodeUTF8))
+        self.checksumtypeselection.setItemText(6, QtGui.QApplication.translate("QTIface", "ripemd160", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("QTIface", "Hash Type:", None, QtGui.QApplication.UnicodeUTF8))
         self.cleartextboxbutton.setText(QtGui.QApplication.translate("QTIface", "Clear All", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("QTIface", "1) Browse for file\n"
-"\n"
-"2) Select hash type\n"
-"\n"
-"3) Click Generate Hash.", None, QtGui.QApplication.UnicodeUTF8))
+        self.Verifybutton.setText(QtGui.QApplication.translate("QTIface", "Verify Hash", None, QtGui.QApplication.UnicodeUTF8))
+        self.verifyfilebrowserbutton.setText(QtGui.QApplication.translate("QTIface", "...", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setTitle(QtGui.QApplication.translate("QTIface", "File", None, QtGui.QApplication.UnicodeUTF8))
         self.menuHelp.setTitle(QtGui.QApplication.translate("QTIface", "Help", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave_hash_as.setText(QtGui.QApplication.translate("QTIface", "Save hash as...", None, QtGui.QApplication.UnicodeUTF8))

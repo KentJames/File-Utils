@@ -1,13 +1,14 @@
 #!/usr/bin/python3
-
+#
 #  Spawns main form for HashUtils, and manages events and child forms.
+#
 #  To do: 
 #  Cleanup module package dependencies
 #  Formatting of ascii/utf output
 #  Finish Dialog Connections
 #  Implement saveas feature for specific hash types.
-#
-#
+#  Open specific hash types to verify
+#  Implement table instead of textedit.
 #
 #
 #  Made by: James Kent (jameschristopherkent@gmail.com)
@@ -36,37 +37,81 @@ from PyQt4 import QtCore,QtGui
 from ..os import platformdetect
 from ..hashob import hashob
 from .Forms import aboutdialog,qtiface
+from ..import exceptions
+
+class PyQTException(exceptions.FileUtilsException):
+    pass
+
+class FileAttr(object):
+
+    def __init__(self,filepath):
+
+        self.filepath = filepath
+        self.fileinfo = {}
+
+        try:
+
+            self.fileinfo.update({'FileSize': os.path.getsize(self.filepath)})
+            self.fileinfo.update({'Exists':os.path.exists(self.filepath)})
+            self.extension = os.path.splitext(self.filepath)[1]
+            self.fileinfo.update({'Extension':self.extension})
+        
+        except OSError:
+            
+            raise PyQTException("iface.FileAttr.__init__")
+
+        
+
+    def __getitem__(self,key):
+
+        return self.fileinfo[key]
+
+
 
 class StartQT4(QtGui.QMainWindow):
 
     def __init__(self,parent=None):
 
+        # Initialise widgets
 
         QtGui.QWidget.__init__(self, parent)
 
-        #Setup Variables
+        # Setup Variables
 
         self.systeminfo = platformdetect.detectos()
         self.filename = None
+        self.verifyfilename = None
+        self.savehashfilename = None
         self.checksum = None
         self.hashtypeqt = None
         self.string = None
+        self.lastknownhash = None
+
+        self.fileattributes = None
+        self.verifyfileattributes = None
 
         
-        #Setup Main UI form
+        ## Setup Main UI form
 
         self.ui = qtiface.Ui_QTIface()
         self.ui.setupUi(self)
-     
 
+        
 
-        ##Connect all buttons to event functions.
+        ## Connect all buttons to event functions.
 
-        #Pushbuttons
+        # Pushbuttons
         QtCore.QObject.connect(self.ui.FileSearch,QtCore.SIGNAL("clicked()"), self.file_browser)
         QtCore.QObject.connect(self.ui.checksumactivate,QtCore.SIGNAL("clicked()"), self.checksum_activate)
         QtCore.QObject.connect(self.ui.cleartextboxbutton,QtCore.SIGNAL("clicked()"),self.clearall)
+        
+        QtCore.QObject.connect(self.ui.verifyfilebrowserbutton,QtCore.SIGNAL("clicked()"),self.file_browser_verify)
+        QtCore.QObject.connect(self.ui.Verifybutton,QtCore.SIGNAL("clicked()"),self.comparehashvalues)
+
+        #Combobuttons
+
         QtCore.QObject.connect(self.ui.checksumtypeselection,QtCore.SIGNAL("activated(QString)"),self.sethashtype)
+
 
         #Menus
         QtCore.QObject.connect(self.ui.actionQuit_3,QtCore.SIGNAL("triggered()"),self.exitqt)
@@ -77,10 +122,16 @@ class StartQT4(QtGui.QMainWindow):
         #Establish default hash
         self.sethashtype()
 
+
+
+
+
+
     def file_browser(self):
 
         fd = QtGui.QFileDialog(self)
         self.filename = fd.getOpenFileName()
+        self.fileattributes = FileAttr(self.filename)
 
         if self.filename is '':
 
@@ -89,21 +140,28 @@ class StartQT4(QtGui.QMainWindow):
         else:
             
             self.outputtotextbox("File Path: {}".format(self.filename))
-            if int( self.getfilesize()) > 1073741824:
+            if int( self.fileattributes['FileSize']) > 1073741824:
                 self.outputtotextbox("Warning: Your operating system states your file is very large.")
                 self.outputtotextbox("Depending upon your hardware configuration, this file could take from several seconds to several minutes to hash.")
             else:
                 pass
             self.outputtotextbox("Click Checksum to hash file...")
             self.outputtotextbox(" ")
+
+
             
+    def file_browser_verify(self):
 
+        fd = QtGui.QFileDialog(self)
+        self.verifyfilename = fd.getOpenFileName()
+        self.verifyfileattributes = FileAttr(self.filename)
 
-    def getfilesize(self):
-
-        return os.path.getsize(self.filename)
-
-
+##
+##    def getfilesize(self):
+##
+##        return os.path.getsize(self.filename)
+##
+##
         
     
     def sethashtype(self):
@@ -125,18 +183,30 @@ class StartQT4(QtGui.QMainWindow):
             self.outputtotextbox("File: {}".format(self.checksum.returnfilename()))
             self.outputtotextbox("File Size: {} bytes".format(self.checksum.returnfilesize()))
             self.outputtotextbox("Hash Type: {}".format(self.checksum.returnchecksumtype()))
-            self.outputtotextbox("Hash: {}".format(self.checksum.returnhexhash()))
+            self.lastknownhash = self.checksum.returnhexhash()
+            self.outputtotextbox("Hash: {}".format(self.lastknownhash))
             self.outputtotextbox(" ")
                 
 
         except hashob.FilePathException:
-            self.outputtotextbox("Empty filepath specified...")
+            self.outputtotextbox("No file specified...")
+            self.outputtotextbox(" ")
         except hashob.HashTypeException:
-            self.outputtotextbox("Invalid hash type specified...")
+            self.outputtotextbox("Hash type not supported by platform: {} ".format(self.systeminfo['OS']))
+            self.outputtotextbox(" ")
         except AttributeError:
             self.outputtotextbox("Ooops...Looks like an unexpected error occured!")
+            self.outputtotextbox(" ")
 
+    def comparehashvalues(self):
 
+        
+        if self.lastknownhash==self.ui.verifylineedit.text():
+            self.ui.verifylineedit.setText("Verification PASSED!")
+        else:
+            self.ui.verifylineedit.setText("Verification FAILED!")        
+
+    
 
        
         
@@ -153,7 +223,9 @@ class StartQT4(QtGui.QMainWindow):
         self.filename = None
 
     def saveas(self):
-        pass
+        
+        fd = QtGui.QFileDialog(self)
+        self.savehashfilename = fd.getSaveFileName()
 
     def showhelp(self):
         pass
@@ -173,9 +245,7 @@ Created by James Kent
 Source: https://github.com/KentJames/File-Utils""", None, QtGui.QApplication.UnicodeUTF8))
         self.aboutdialog.label_2.setText(QtGui.QApplication.translate("Dialog", """System Info: 
 
-Platform: {} 
-
-Release: {} 
+Platform: {} {} 
 
 Version: {}""".format(self.systeminfo['OS'],self.systeminfo['Release'],self.systeminfo['Version'])))
         Dialog.setAttribute(QtCore.Qt.WA_DeleteOnClose)

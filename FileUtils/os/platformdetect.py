@@ -25,12 +25,6 @@ class detectos(object):
         self.infodict.update({'OS':platform.system()})
         self.infodict.update({'Release':platform.release()})
         self.infodict.update({'Version':platform.version()})
-    #    self.returndata()
-
-
-    #def returndata(self):
-
-     #   return self.infodict
 
 
         
