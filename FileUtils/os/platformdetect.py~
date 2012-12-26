@@ -1,0 +1,22 @@
+import platform
+from .. import exceptions
+
+class detectos(object):
+
+    def __init__(self):
+        
+        self.infodict = {}
+        self.detectplatform()
+        self.returndata()
+
+
+    def detectplatform(self):
+
+        self.infodict.update({'OS':platform.system()})
+        self.infodict.update({'Release':platform.release()})
+        self.infodict.update({'Version':platform.version()})
+
+
+    def returndata(self):
+
+        return self.infodict
