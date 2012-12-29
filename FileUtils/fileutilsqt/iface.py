@@ -33,40 +33,15 @@
 
 import sys
 import os
+
 from PyQt4 import QtCore,QtGui
-from ..os import platformdetect
+from ..os import platformdetect,fileattr
 from ..hashob import hashob
 from .Forms import aboutdialog,qtiface
 from ..import exceptions
 
 class PyQTException(exceptions.FileUtilsException):
     pass
-
-class FileAttr(object):
-
-    def __init__(self,filepath):
-
-        self.filepath = filepath
-        self.fileinfo = {}
-
-        try:
-
-            self.fileinfo.update({'FileSize': os.path.getsize(self.filepath)})
-            self.fileinfo.update({'Exists':os.path.exists(self.filepath)})
-            self.extension = os.path.splitext(self.filepath)[1]
-            self.fileinfo.update({'Extension':self.extension})
-        
-        except OSError:
-            
-            raise PyQTException("iface.FileAttr.__init__")
-
-        
-
-    def __getitem__(self,key):
-
-        return self.fileinfo[key]
-
-
 
 class StartQT4(QtGui.QMainWindow):
 
@@ -131,7 +106,7 @@ class StartQT4(QtGui.QMainWindow):
 
         fd = QtGui.QFileDialog(self)
         self.filename = fd.getOpenFileName()
-        self.fileattributes = FileAttr(self.filename)
+        self.fileattributes = fileattr.FileAttr(self.filename)
 
         if self.filename is '':
 
@@ -154,7 +129,7 @@ class StartQT4(QtGui.QMainWindow):
 
         fd = QtGui.QFileDialog(self)
         self.verifyfilename = fd.getOpenFileName()
-        self.verifyfileattributes = FileAttr(self.filename)
+        self.verifyfileattributes = fileattr.FileAttr(self.filename)
 
 ##
 ##    def getfilesize(self):
@@ -254,7 +229,8 @@ Version: {}""".format(self.systeminfo['OS'],self.systeminfo['Release'],self.syst
 
     def exitqt(self):
 
-        sys.exit(QtGui.QApplication.exec_())
+        
+        sys.exit(QtGui.QApplication.exit())
 
 
 
