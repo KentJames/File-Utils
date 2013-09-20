@@ -50,6 +50,7 @@ class StartQT4(QtGui.QMainWindow):
         # Initialise widgets
 
         QtGui.QWidget.__init__(self, parent)
+        QtCore.QThread.__init__(self)
 
         # Setup Variables
 
@@ -149,29 +150,21 @@ class StartQT4(QtGui.QMainWindow):
 
         
 
-        try:
-            self.checksum = hashob.hasher_if(self.filename,self.hashtypeqt)
-#            self.outputtotextbox('Hashing file...')
-            self.checksum.fileaccess()
-            self.checksum.hashtype()
-            self.checksum.hashfile()
-            self.outputtotextbox("File: {}".format(self.checksum.returnfilename()))
-            self.outputtotextbox("File Size: {} bytes".format(self.checksum.returnfilesize()))
-            self.outputtotextbox("Hash Type: {}".format(self.checksum.returnchecksumtype()))
-            self.lastknownhash = self.checksum.returnhexhash()
-            self.outputtotextbox("Hash: {}".format(self.lastknownhash))
-            self.outputtotextbox(" ")
-                
 
-        except hashob.FilePathException:
-            self.outputtotextbox("No file specified...")
-            self.outputtotextbox(" ")
-        except hashob.HashTypeException:
-            self.outputtotextbox("Hash type not supported by platform: {} ".format(self.systeminfo['OS']))
-            self.outputtotextbox(" ")
-        except AttributeError:
-            self.outputtotextbox("Ooops...Looks like an unexpected error occured!")
-            self.outputtotextbox(" ")
+        self.checksum = HashWorker(self.filename,self.hashtypeqt)
+        self.checksum.asciihash.connect(self.giveupthehashbro)
+
+        self.checksum.start()
+
+
+    def giveupthehashbro(self, val):
+
+        self.lastknownhash = val
+        self.outputtotextbox("File: {}".format(self.filename))
+        self.outputtotextbox("File Size: {} bytes".format(self.fileattributes['FileSize']))
+        self.outputtotextbox("Hash Type: {}".format(self.hashtypeqt))
+        self.outputtotextbox("Hash: {}".format(self.lastknownhash))
+        self.outputtotextbox(" ")
 
     def comparehashvalues(self):
 
@@ -231,6 +224,53 @@ Version: {}""".format(self.systeminfo['OS'],self.systeminfo['Release'],self.syst
 
         
         sys.exit(QtGui.QApplication.exit())
+
+class HashWorker(QtCore.QThread):
+
+    def __init__(self,filename,hashtype,parent=None):
+        
+        QtCore.QThread.__init__(self)
+
+        self.filename = filename
+        self.hashtype = hashtype
+
+        self.hashobject = None
+        self.resulthash = None
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+
+        self.HashExecute()
+        self.returnHash()
+        
+
+    def HashExecute(self):
+
+       
+        self.hashobject = hashob.hasher_if(self.filename,self.hashtype)
+        
+        self.hashobject.fileaccess()
+        self.hashobject.hashtype()
+        self.hashobject.hashfile()
+
+
+        
+        
+        self.resulthash = self.hashobject.returnhexhash()
+
+    # Connect signal, this serves as communication of the file hash back to the main thread.
+
+    asciihash = QtCore.pyqtSignal(str)
+
+
+    def returnHash(self):
+
+        self.asciihash.emit(self.resulthash)
+        self.quit()
+
+
 
 
 
