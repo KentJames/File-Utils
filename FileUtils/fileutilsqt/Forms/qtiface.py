@@ -95,7 +95,7 @@ class Ui_QTIface(object):
         QtCore.QMetaObject.connectSlotsByName(QTIface)
 
     def retranslateUi(self, QTIface):
-        QTIface.setWindowTitle(QtGui.QApplication.translate("QTIface", "QTIface", None, QtGui.QApplication.UnicodeUTF8))
+        QTIface.setWindowTitle(QtGui.QApplication.translate("QTIface", "HashUtility v1.0", None, QtGui.QApplication.UnicodeUTF8))
         self.FileSearch.setText(QtGui.QApplication.translate("QTIface", " Browse ", None, QtGui.QApplication.UnicodeUTF8))
         self.checksumactivate.setText(QtGui.QApplication.translate("QTIface", "Generate Hash", None, QtGui.QApplication.UnicodeUTF8))
         self.checksumtypeselection.setItemText(0, QtGui.QApplication.translate("QTIface", "md5", None, QtGui.QApplication.UnicodeUTF8))
