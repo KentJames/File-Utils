@@ -1,4 +1,4 @@
-HashUtility v0.8.0
+HashUtility v1.0
 
 Copyright(C) James Kent 2013
 
@@ -39,21 +39,15 @@ I welcome comments and critiques on my code and what I can improve so please tak
 #  There is a known issue involving the PyQt4 framework and specifying filepaths on unmounted
    filesystems. This causes python to crash out. For now, if you want to hash a file located
    on an unmounted filesystem, you must mount the filesystem BEFORE starting HashUtility.
-   I hope to fix this problem in a later update. 
 #  Certain buttons on the UI aren't connected yet, I should connect the signals and slots for these in the next update.
 
 
 ###TO DO###:
 
-##QT UI:
 
-#  Cleanup module package dependencies
-#  Formatting of ascii/utf output
-#  Finish Dialog Connections
-#  Implement saveas feature for specific hash types
-#  Add verify feature for hash files.
+
 
 ##Backend:
 
 #  Add logic for opening .md5 and other crytographic file extensions for verifying.
-#  Fix crash bug associated with unmounted filesystems on unix derived systems(OSX/Linux)
+
